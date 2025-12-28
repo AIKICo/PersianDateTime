@@ -57,166 +57,70 @@ namespace FarsiLibrary.Win.DevExpress
         }
     }
 
+    // در فایل XtraFADateEdit.cs
+
     [UserRepositoryItem("Register")]
     public class RepositoryItemXtraFADateEdit : RepositoryItemDateEdit
     {
-        [Browsable(false)]
-        public override string EditorTypeName
-        {
-            get { return XtraFADateEdit.EditorName; }
-        }
-
-        public RepositoryItemXtraFADateEdit()
-        {
-            EnsureDefaultButton = true;
-            NullDateCalendarValue = GetNullCalendarDate();
-        }
-
-        private DateTime GetNullCalendarDate()
-        {
-            // تغییر: همیشه مقدار مینیمم شمسی برگردد
-            return PersianDate.MinValue;
-        }
-
-        [DefaultValue(true)]
-        public bool EnsureDefaultButton
-        {
-            get; set;
-        }
-
+        // ۱. اطمینان از ثبت کنترل
         static RepositoryItemXtraFADateEdit()
         {
             Register();
         }
 
-        [RefreshProperties(RefreshProperties.All)]
-        [DXCategory("Behavior")]
-        public new DateTime NullDateCalendarValue
+        public RepositoryItemXtraFADateEdit()
         {
-            get { return base.NullDateCalendarValue; }
-            set { base.NullDateCalendarValue = value; }
+            // ۲. غیرفعال کردن استفاده از ماسک برای فرمت نمایشی
+            // این کار باعث می‌شود کنترلر مجبور شود از منطق GetDisplayText ما استفاده کند
+            this.UseMaskAsDisplayFormat = false;
+
+            // ۳. تنظیم دکمه پیش‌فرض
+            // EnsureDefaultButton = true;
+
         }
 
-        public bool ShouldSerializeNullDateCalendarValue()
-        {
-            return false;
-        }
+        public const string EditorName = "XtraFADateEdit";
 
-        public override void EndInit()
-        {
-            base.EndInit();
-            if (EnsureDefaultButton && Buttons.Count < 1)
-            {
-                EnsureDefaultButtonExists();
-            }
-        }
-
-        private void EnsureDefaultButtonExists()
-        {
-            Buttons.Add(new EditorButton
-            {
-                IsDefaultButton = true,
-                Kind = ButtonPredefines.Down
-            });
-        }
-
-        protected override FormatInfo CreateDisplayFormat()
-        {
-            // تغییر: همیشه فرمت‌دهنده فارسی
-            return new PersianDateEditFormatInfo();
-        }
-
-        protected override FormatInfo CreateEditFormat()
-        {
-            // تغییر: همیشه فرمت‌دهنده فارسی
-            return new PersianDateEditFormatInfo();
-        }
-
-        protected override DateEditValueConverter CreateConverter()
-        {
-            // تغییر: همیشه کانورتر فارسی
-            return new PersianDateEditValueConverter(this);
-        }
-
-        protected override DateTime ConvertToDateTime(object val)
-        {
-            // تغییر: حذف شرط و استفاده اجباری از کانورتر فارسی
-            var converter = (Converter is PersianDateEditValueConverter) ? Converter : CreateConverter();
-            return converter.ConvertToDateTime(val);
-        }
-
-        protected override bool IsNullValue(object editValue)
-        {
-            // تغییر: منطق بررسی نال بودن مخصوص شمسی
-            if (base.IsNullValue(editValue))
-                return true;
-
-            var dt = ConvertToDateTime(editValue);
-            if (dt.Equals(NullDate) || dt.Equals(PersianDate.MinValue))
-                return true;
-
-            if (editValue != null)
-                return editValue.Equals(NullDate);
-
-            return false;
-        }
+        public override string EditorTypeName => EditorName;
 
         public static void Register()
         {
-            XtraFADateEdit.Register();
+            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(EditorName, typeof(XtraFADateEdit), typeof(RepositoryItemXtraFADateEdit), typeof(DateEditViewInfo), new ButtonEditPainter(), true, EditImageIndexes.DateEdit));
         }
 
-        protected new XtraFADateEdit OwnerEdit
+        // ***************************************************************
+        // قلب تپنده رفع مشکل: مداخله در آخرین لحظه نمایش متن
+        // ***************************************************************
+        protected override void RaiseCustomDisplayText(CustomDisplayTextEventArgs e)
         {
-            get { return base.OwnerEdit as XtraFADateEdit; }
-        }
+            // فراخوانی منطق پایه
+            base.RaiseCustomDisplayText(e);
 
-        public override string GetDisplayText(FormatInfo format, object editValue)
-        {
-            // تغییر: حذف شرط IsFarsiCulture
-            // همیشه تلاش برای فرمت‌دهی شمسی
-            return TryFormatEditValue(editValue);
-        }
-
-        public override string GetDisplayText(object editValue)
-        {
-            // تغییر: حذف شرط IsFarsiCulture
-            return TryFormatEditValue(editValue);
-        }
-
-        private string TryFormatEditValue(object editValue)
-        {
-            if (editValue is DateTime)
+            // اگر مقدار معتبر است، آن را به شمسی تبدیل کن
+            // این متد بر روی تمام تنظیمات ماسک و فرمت اولویت دارد
+            if (e.Value is DateTime dt && dt != DateTime.MinValue && dt != DateTime.MaxValue)
             {
-                DateTime dt = (DateTime)editValue;
-
-                // بررسی اینکه تاریخ در محدوده معتبر باشد
-                if (dt != DateTime.MinValue && dt != DateTime.MaxValue && PersianCalendar.IsWithInSupportedRange(dt))
+                try
                 {
-                    PersianDate pd = new PersianDate(dt);
-                    return FormatDisplayText(pd);
+                    // استفاده از کلاس PersianDate برای تولید رشته شمسی
+                    // نکته: اگر فرمت خاصی مد نظر است (مثلا yyyy/MM/dd) اینجا تغییر دهید
+                    e.DisplayText = new PersianDate(dt).ToString("d");
+                }
+                catch
+                {
+                    // در صورت بروز هرگونه خطا، به نمایش پیش‌فرض میلادی بسنده کن تا برنامه کرش نکند
                 }
             }
-
-            return string.Empty;
         }
 
-        protected virtual string FormatDisplayText(object value)
+        // ۴. بازنویسی GetDisplayText برای حالت‌های غیر فوکوس و گرید
+        public override string GetDisplayText(FormatInfo format, object editValue)
         {
-            if (value is PersianDate)
+            if (editValue is DateTime dt && dt != DateTime.MinValue && dt != DateTime.MaxValue)
             {
-                PersianDate pd = (PersianDate)value;
-                return pd.ToString("d");
+                return new PersianDate(dt).ToString("d");
             }
-
-            if (value is DateTime)
-            {
-                DateTime dt = (DateTime)value;
-                if (dt != DateTime.MinValue && dt != DateTime.MaxValue)
-                    return new PersianDate(dt).ToString("d");
-            }
-
-            return NullText;
+            return base.GetDisplayText(format, editValue);
         }
     }
 
