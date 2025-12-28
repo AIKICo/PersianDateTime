@@ -16,25 +16,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6E1B09D2-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7E7AC667-9A20-4A48-A3B0-2109781977B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.Win", "FarsiLibrary.Win\FarsiLibrary.Win.csproj", "{83C3AEB8-5322-4DB6-9E7E-4BF8A319DCE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.Win", "FarsiLibrary.Win\FarsiLibrary.Win.csproj", "{83C3AEB8-5322-4DB6-9E7E-4BF8A319DCE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.Utils", "FarsiLibrary.Utils\FarsiLibrary.Utils.csproj", "{ED29E567-C801-49E9-8C33-CFB66042B07B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.Utils", "FarsiLibrary.Utils\FarsiLibrary.Utils.csproj", "{ED29E567-C801-49E9-8C33-CFB66042B07B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.Localization", "FarsiLibrary.Localization\FarsiLibrary.Localization.csproj", "{E5575624-4B92-4E51-B98B-20F31FE5B5B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.Localization", "FarsiLibrary.Localization\FarsiLibrary.Localization.csproj", "{E5575624-4B92-4E51-B98B-20F31FE5B5B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.WPFDemo", "FarsiLibrary.WPFDemo\FarsiLibrary.WPFDemo.csproj", "{92DB562E-4261-466D-ACE4-66A51505B7C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.WPFDemo", "FarsiLibrary.WPFDemo\FarsiLibrary.WPFDemo.csproj", "{92DB562E-4261-466D-ACE4-66A51505B7C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.WPF.VisualStudio.Design", "FarsiLibrary.WPF.VisualStudio.Design\FarsiLibrary.WPF.VisualStudio.Design.csproj", "{E7F44116-95CA-4E29-9215-FB4366589780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.WPF.VisualStudio.Design", "FarsiLibrary.WPF.VisualStudio.Design\FarsiLibrary.WPF.VisualStudio.Design.csproj", "{E7F44116-95CA-4E29-9215-FB4366589780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.Win.DevExpress.15.2", "FarsiLibrary.Win.DevExpress.15.2\FarsiLibrary.Win.DevExpress.15.2.csproj", "{240A0D2C-5E44-4C05-8995-EE63E4AE9D0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.Win.DevExpress.15.2", "FarsiLibrary.Win.DevExpress.15.2\FarsiLibrary.Win.DevExpress.15.2.csproj", "{240A0D2C-5E44-4C05-8995-EE63E4AE9D0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.WinFormDemo", "FarsiLibrary.WinFormDemo\FarsiLibrary.WinFormDemo.csproj", "{A5EE7D36-30E7-49AB-90EC-97836840C144}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.WinFormDemo", "FarsiLibrary.WinFormDemo\FarsiLibrary.WinFormDemo.csproj", "{A5EE7D36-30E7-49AB-90EC-97836840C144}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{8E17BAC9-A86F-426B-A988-4C56124B37D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{B379080F-CB94-47D1-BB06-0996E83820B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarsiLibrary.Win.DevExpress.16.1", "FarsiLibrary.Win.DevExpress.16.1\FarsiLibrary.Win.DevExpress.16.1.csproj", "{D0E90437-9EEA-4A34-BF68-093D1717B76D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarsiLibrary.Win.DevExpress.16.1", "FarsiLibrary.Win.DevExpress.16.1\FarsiLibrary.Win.DevExpress.16.1.csproj", "{D0E90437-9EEA-4A34-BF68-093D1717B76D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
