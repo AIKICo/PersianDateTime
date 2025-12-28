@@ -30,11 +30,12 @@ namespace FarsiLibrary.Utils.Internals
 
             Type type = owner.GetType();
             FieldInfo fieldinfo = GetField(type, fieldName);
-            
-            if(fieldinfo == null)
-                throw new ArgumentNullException(fieldName, "fieldName can not be found on the type");
 
-            fieldinfo.SetValue(owner, value);
+            fieldinfo?.SetValue(owner, value);
+            // else
+                // throw new ArgumentNullException(fieldName, "fieldName can not be found on the type");
+
+            // fieldinfo.SetValue(owner, value);
         }
 
         /// <summary>

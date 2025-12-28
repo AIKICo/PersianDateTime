@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Controls\FAMonthViewContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Design\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FAMessageBoxEx\FAMessageBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FAPopup\FACustomTopForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FAPopup\FAShadow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FAPopup\FATopFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
