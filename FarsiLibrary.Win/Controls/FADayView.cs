@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using FarsiLibrary.Utils;
 using FarsiLibrary.Win.BaseClasses;
 using FarsiLibrary.Win.Design;
 using FarsiLibrary.Win.Events;
