@@ -48,12 +48,13 @@ namespace FarsiLibrary.Win.DevExpress
 
         protected override PopupBaseForm CreatePopupForm()
         {
-            if (!CultureManager.Instance.ControlsCulture.IsFarsiCulture()) return base.CreatePopupForm();
-
-            if (Properties.CalendarView == CalendarView.TouchUI) return new FATouchPopupDateEditForm(this);
+            // تغییر: حذف شرط IsFarsiCulture
+            // همیشه پاپ‌آپ شمسی باز شود
+            if (Properties.CalendarView == CalendarView.TouchUI)
+                return new FATouchPopupDateEditForm(this);
 
             return new VistaPopupPersianDateEditForm(this);
-        }        
+        }
     }
 
     [UserRepositoryItem("Register")]
@@ -73,10 +74,8 @@ namespace FarsiLibrary.Win.DevExpress
 
         private DateTime GetNullCalendarDate()
         {
-            if (CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return PersianDate.MinValue;
-
-            return DateTime.MinValue;
+            // تغییر: همیشه مقدار مینیمم شمسی برگردد
+            return PersianDate.MinValue;
         }
 
         [DefaultValue(true)]
@@ -123,44 +122,32 @@ namespace FarsiLibrary.Win.DevExpress
 
         protected override FormatInfo CreateDisplayFormat()
         {
-            if(CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return new PersianDateEditFormatInfo();
-
-            return base.CreateDisplayFormat();
+            // تغییر: همیشه فرمت‌دهنده فارسی
+            return new PersianDateEditFormatInfo();
         }
 
         protected override FormatInfo CreateEditFormat()
         {
-            if(CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return new PersianDateEditFormatInfo();
-
-            return base.CreateEditFormat();
+            // تغییر: همیشه فرمت‌دهنده فارسی
+            return new PersianDateEditFormatInfo();
         }
 
         protected override DateEditValueConverter CreateConverter()
         {
-            if(CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return new PersianDateEditValueConverter(this);
-
-            return base.CreateConverter();
+            // تغییر: همیشه کانورتر فارسی
+            return new PersianDateEditValueConverter(this);
         }
 
         protected override DateTime ConvertToDateTime(object val)
         {
-            if (CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-            {
-                var converter = (Converter is PersianDateEditValueConverter) ? Converter : CreateConverter();
-                return converter.ConvertToDateTime(val);
-            }
-
-            return base.ConvertToDateTime(val);
+            // تغییر: حذف شرط و استفاده اجباری از کانورتر فارسی
+            var converter = (Converter is PersianDateEditValueConverter) ? Converter : CreateConverter();
+            return converter.ConvertToDateTime(val);
         }
 
         protected override bool IsNullValue(object editValue)
         {
-            if (!CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return base.IsNullValue(editValue);
-
+            // تغییر: منطق بررسی نال بودن مخصوص شمسی
             if (base.IsNullValue(editValue))
                 return true;
 
@@ -186,17 +173,14 @@ namespace FarsiLibrary.Win.DevExpress
 
         public override string GetDisplayText(FormatInfo format, object editValue)
         {
-            if (!CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return base.GetDisplayText(format, editValue);
-
+            // تغییر: حذف شرط IsFarsiCulture
+            // همیشه تلاش برای فرمت‌دهی شمسی
             return TryFormatEditValue(editValue);
         }
 
         public override string GetDisplayText(object editValue)
         {
-            if (!CultureManager.Instance.ControlsCulture.IsFarsiCulture())
-                return base.GetDisplayText(editValue);
-
+            // تغییر: حذف شرط IsFarsiCulture
             return TryFormatEditValue(editValue);
         }
 
@@ -206,7 +190,8 @@ namespace FarsiLibrary.Win.DevExpress
             {
                 DateTime dt = (DateTime)editValue;
 
-                if (PersianCalendar.IsWithInSupportedRange(dt))
+                // بررسی اینکه تاریخ در محدوده معتبر باشد
+                if (dt != DateTime.MinValue && dt != DateTime.MaxValue && PersianCalendar.IsWithInSupportedRange(dt))
                 {
                     PersianDate pd = new PersianDate(dt);
                     return FormatDisplayText(pd);
@@ -227,7 +212,8 @@ namespace FarsiLibrary.Win.DevExpress
             if (value is DateTime)
             {
                 DateTime dt = (DateTime)value;
-                return dt.Date.ToShortDateString();
+                if (dt != DateTime.MinValue && dt != DateTime.MaxValue)
+                    return new PersianDate(dt).ToString("d");
             }
 
             return NullText;
@@ -258,7 +244,7 @@ namespace FarsiLibrary.Win.DevExpress
 
             return PersianDate.MinValue;
         }
-        
+
         protected override object ConvertToObject(ConvertEditValueEventArgs args)
         {
             var obj = args.Value;
@@ -285,7 +271,14 @@ namespace FarsiLibrary.Win.DevExpress
 
             try
             {
+                // تلاش برای پارس کردن تاریخ
                 DateTime result;
+                // اینجا بهتر است ابتدا سعی کنیم شمسی پارس کنیم
+                if (PersianDate.TryParse(obj.ToString(), out PersianDate pd))
+                {
+                    return pd.ToDateTime();
+                }
+
                 if (DateTime.TryParse(obj.ToString(), out result) &&
                     PersianCalendar.IsWithInSupportedRange(result))
                 {

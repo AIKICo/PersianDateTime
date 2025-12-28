@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -133,26 +133,31 @@ namespace FarsiLibrary.Win.DevExpress
 
         protected override void RaiseQueryDisplayText(QueryDisplayTextEventArgs e)
         {
+            // فراخوانی متد پایه برای اطمینان از صحت عملکرد
+            base.RaiseQueryDisplayText(e);
+
             if (e.EditValue != null && e.EditValue is DateTime)
             {
-                if (CultureHelper.IsFarsiCulture())
+                DateTime dt = (DateTime)e.EditValue;
+
+                // شرط IsFarsiCulture حذف شد. همیشه تبدیل انجام می‌شود.
+                // بررسی محدوده معتبر برای جلوگیری از خطا
+                if (dt != DateTime.MinValue && dt != DateTime.MaxValue)
                 {
-                    DateTime dt = (DateTime)e.EditValue;
-                    PersianDate pd = new PersianDate(dt);
-                    e.DisplayText = FormatDisplayText(pd);
-
-                    if (OwnerEdit != null)
-                        OwnerEdit.MonthView.SelectedDateTime = dt;
+                    try
+                    {
+                        PersianDate pd = new PersianDate(dt);
+                        e.DisplayText = FormatDisplayText(pd);
+                    }
+                    catch
+                    {
+                        // در صورت بروز خطا، همان تاریخ میلادی را نشان دهد
+                        e.DisplayText = FormatDisplayText(dt);
+                    }
                 }
-                else
-                {
-                    DateTime dt = (DateTime)e.EditValue;
 
-                    if (OwnerEdit != null)
-                        OwnerEdit.MonthView.SelectedDateTime = dt;
-
-                    e.DisplayText = FormatDisplayText(dt);
-                }
+                if (OwnerEdit != null)
+                    OwnerEdit.MonthView.SelectedDateTime = dt;
             }
 
             if (e.EditValue == null)
@@ -160,14 +165,7 @@ namespace FarsiLibrary.Win.DevExpress
 
             if (OwnerEdit != null)
             {
-                if (!string.IsNullOrEmpty(e.DisplayText) && OwnerEdit.ShowToolTips)
-                {
-                    OwnerEdit.ToolTip = e.DisplayText;
-                }
-                else
-                {
-                    OwnerEdit.ToolTip = null;
-                }
+                OwnerEdit.ToolTip = (!string.IsNullOrEmpty(e.DisplayText) && OwnerEdit.ShowToolTips) ? e.DisplayText : null;
             }
         }
 
@@ -176,16 +174,13 @@ namespace FarsiLibrary.Win.DevExpress
             if (editValue is DateTime)
             {
                 DateTime dt = (DateTime)editValue;
-
-                if (CultureHelper.IsFarsiCulture())
+                // شرط IsFarsiCulture حذف شد
+                if (dt != DateTime.MinValue && dt != DateTime.MaxValue)
                 {
-                    PersianDate pd = new PersianDate(dt);
-                    return FormatDisplayText(pd);
+                    return FormatDisplayText(new PersianDate(dt));
                 }
-
                 return FormatDisplayText(dt);
             }
-
             return string.Empty;
         }
 
@@ -193,14 +188,17 @@ namespace FarsiLibrary.Win.DevExpress
         {
             if (value is PersianDate)
             {
-                PersianDate pd = (PersianDate)value;
-                return pd.ToString("d");
+                return ((PersianDate)value).ToString("d");
             }
 
             if (value is DateTime)
             {
                 DateTime dt = (DateTime)value;
-                return dt.Date.ToShortDateString();
+                if (dt == DateTime.MinValue || dt == DateTime.MaxValue)
+                    return Properties.NullText;
+
+                // تبدیل اجباری به شمسی
+                return new PersianDate(dt).ToString("d");
             }
 
             return Properties.NullText;

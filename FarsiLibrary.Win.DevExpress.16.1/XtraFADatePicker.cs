@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -104,18 +104,20 @@ namespace FarsiLibrary.Win.DevExpress
         private bool TryParseDateTime(string datetime, out DateTime? dt)
         {
             dt = null;
-
             try
             {
-                if(string.IsNullOrEmpty(datetime))
+                if (string.IsNullOrEmpty(datetime))
                     return false;
 
-                if (CultureHelper.IsFarsiCulture())
+                // شرط IsFarsiCulture حذف شد.
+                // همیشه اول تلاش می‌کنیم شمسی پارس کنیم
+                try
                 {
                     dt = PersianDate.Parse(datetime);
                 }
-                else
+                catch
                 {
+                    // اگر شمسی نبود (مثلا فرمت میلادی بود)، تلاش می‌کنیم میلادی پارس کنیم
                     dt = DateTime.Parse(datetime);
                 }
 
