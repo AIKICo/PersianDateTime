@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Calendar;
 using DevExpress.XtraEditors.Controls;
@@ -449,6 +450,7 @@ namespace FarsiLibrary.Win.DevExpress
         {
         }
 
+        
         protected override CalendarControl CreateCalendar()
         {
             return new PopupPersianCalendarControl();
@@ -490,6 +492,8 @@ namespace FarsiLibrary.Win.DevExpress
             FirstDayOfWeek = DayOfWeek.Saturday;
             MinValue = PersianDate.MinValue;
             MaxValue = PersianDate.MaxValue;
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = DefaultBoolean.True;
         }
 
         public new VistaPersianCalendarViewInfo CalendarViewInfo => (VistaPersianCalendarViewInfo)base.CalendarViewInfo;

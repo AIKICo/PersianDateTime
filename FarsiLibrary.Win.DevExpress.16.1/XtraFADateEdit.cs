@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
-using DevExpress.Data.Mask;
 using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -12,11 +10,12 @@ using DevExpress.XtraEditors.Registrator;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraEditors.ViewInfo;
 using FarsiLibrary.Utils;
-using FarsiLibrary.Utils.Internals;
-using PersianCalendar = FarsiLibrary.Utils.PersianCalendar;
 
 namespace FarsiLibrary.Win.DevExpress
 {
+    // =================================================================================
+    // کلاس اصلی کنترل (XtraFADateEdit)
+    // =================================================================================
     public class XtraFADateEdit : DateEdit
     {
         public const string EditorName = "XtraFADateEdit";
@@ -26,30 +25,28 @@ namespace FarsiLibrary.Win.DevExpress
             Register();
         }
 
-        public bool ShouldSerializeNullDateCalendarValue()
+        public XtraFADateEdit()
         {
-            return false;
+            // تنظیمات پیش‌فرض در سازنده
         }
+
+        public override string EditorTypeName => EditorName;
 
         public static void Register()
         {
-            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(EditorName, typeof(XtraFADateEdit), typeof(RepositoryItemXtraFADateEdit), typeof(DateEditViewInfo), new ButtonEditPainter(), true, EditImageIndexes.DateEdit));
-        }
-
-        public override string EditorTypeName
-        {
-            get { return EditorName; }
-        }
-
-        protected override MaskManager CreateMaskManager(MaskProperties mask)
-        {
-            return new PersianDateTimeMaskManager();
+            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
+                EditorName,
+                typeof(XtraFADateEdit),
+                typeof(RepositoryItemXtraFADateEdit),
+                typeof(DateEditViewInfo),
+                new ButtonEditPainter(),
+                true,
+                EditImageIndexes.DateEdit));
         }
 
         protected override PopupBaseForm CreatePopupForm()
         {
-            // تغییر: حذف شرط IsFarsiCulture
-            // همیشه پاپ‌آپ شمسی باز شود
+            // اجبار به استفاده از پاپ‌آپ شمسی (بدون شرط زبان سیستم)
             if (Properties.CalendarView == CalendarView.TouchUI)
                 return new FATouchPopupDateEditForm(this);
 
@@ -57,12 +54,26 @@ namespace FarsiLibrary.Win.DevExpress
         }
     }
 
-    // در فایل XtraFADateEdit.cs
-
+    // =================================================================================
+    // کلاس تنظیمات مخزن (RepositoryItem)
+    // =================================================================================
     [UserRepositoryItem("Register")]
     public class RepositoryItemXtraFADateEdit : RepositoryItemDateEdit
     {
-        // ۱. اطمینان از ثبت کنترل
+        // -------------------------------------------------------------------------
+        // ۱. تعریف خاصیت EnsureDefaultButton (حل خطای کامپایل شما)
+        // -------------------------------------------------------------------------
+        private bool _ensureDefaultButton = true;
+
+        [DefaultValue(true)]
+        [Category("Behavior")]
+        [Description("Determines whether the default dropdown button is automatically added.")]
+        public bool EnsureDefaultButton
+        {
+            get { return _ensureDefaultButton; }
+            set { _ensureDefaultButton = value; }
+        }
+
         static RepositoryItemXtraFADateEdit()
         {
             Register();
@@ -70,13 +81,14 @@ namespace FarsiLibrary.Win.DevExpress
 
         public RepositoryItemXtraFADateEdit()
         {
-            // ۲. غیرفعال کردن استفاده از ماسک برای فرمت نمایشی
-            // این کار باعث می‌شود کنترلر مجبور شود از منطق GetDisplayText ما استفاده کند
-            this.UseMaskAsDisplayFormat = false;
+            // ۲. تنظیمات اولیه برای رفع مشکل نمایش میلادی
+            this.UseMaskAsDisplayFormat = false; // غیرفعال کردن ماسک برای نمایش متن
 
-            // ۳. تنظیم دکمه پیش‌فرض
-            // EnsureDefaultButton = true;
-
+            // تنظیم ماسک برای حالت ویرایش (فوکوس)
+            // استفاده از RegEx باعث می‌شود کنترلر سعی نکند تاریخ را به میلادی پارس کند
+            this.Mask.MaskType = MaskType.RegEx;
+            this.Mask.EditMask = @"[1-9][0-9]{3}/[0-1]?[0-9]/[0-3]?[0-9]";
+            this.Mask.UseMaskAsDisplayFormat = false;
         }
 
         public const string EditorName = "XtraFADateEdit";
@@ -85,35 +97,57 @@ namespace FarsiLibrary.Win.DevExpress
 
         public static void Register()
         {
-            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(EditorName, typeof(XtraFADateEdit), typeof(RepositoryItemXtraFADateEdit), typeof(DateEditViewInfo), new ButtonEditPainter(), true, EditImageIndexes.DateEdit));
+            EditorRegistrationInfo.Default.Editors.Add(new EditorClassInfo(
+                EditorName,
+                typeof(XtraFADateEdit),
+                typeof(RepositoryItemXtraFADateEdit),
+                typeof(DateEditViewInfo),
+                new ButtonEditPainter(),
+                true,
+                EditImageIndexes.DateEdit));
         }
 
-        // ***************************************************************
-        // قلب تپنده رفع مشکل: مداخله در آخرین لحظه نمایش متن
-        // ***************************************************************
+        // -------------------------------------------------------------------------
+        // ۳. منطق اضافه کردن دکمه پیش‌فرض (مربوط به EnsureDefaultButton)
+        // -------------------------------------------------------------------------
+        public override void EndInit()
+        {
+            base.EndInit();
+            if (EnsureDefaultButton && Buttons.Count == 0)
+            {
+                CreateDefaultButton();
+            }
+        }
+
+        public override void CreateDefaultButton()
+        {
+            // ساخت دکمه بازشو استاندارد
+            EditorButton button = new EditorButton(ButtonPredefines.Combo);
+            button.IsDefaultButton = true;
+            Buttons.Add(button);
+        }
+
+        // -------------------------------------------------------------------------
+        // ۴. بازنویسی رویداد تبدیل متن برای نمایش همیشه شمسی
+        // -------------------------------------------------------------------------
         protected override void RaiseCustomDisplayText(CustomDisplayTextEventArgs e)
         {
-            // فراخوانی منطق پایه
             base.RaiseCustomDisplayText(e);
 
-            // اگر مقدار معتبر است، آن را به شمسی تبدیل کن
-            // این متد بر روی تمام تنظیمات ماسک و فرمت اولویت دارد
+            // تبدیل مقدار EditValue (که میلادی است) به متن شمسی برای نمایش
             if (e.Value is DateTime dt && dt != DateTime.MinValue && dt != DateTime.MaxValue)
             {
                 try
                 {
-                    // استفاده از کلاس PersianDate برای تولید رشته شمسی
-                    // نکته: اگر فرمت خاصی مد نظر است (مثلا yyyy/MM/dd) اینجا تغییر دهید
-                    e.DisplayText = new PersianDate(dt).ToString("d");
+                    e.DisplayText = new PersianDate(dt).ToString("d"); // فرمت مثال: 1403/10/08
                 }
                 catch
                 {
-                    // در صورت بروز هرگونه خطا، به نمایش پیش‌فرض میلادی بسنده کن تا برنامه کرش نکند
+                    // در صورت خطا، متن تغییر نکند
                 }
             }
         }
 
-        // ۴. بازنویسی GetDisplayText برای حالت‌های غیر فوکوس و گرید
         public override string GetDisplayText(FormatInfo format, object editValue)
         {
             if (editValue is DateTime dt && dt != DateTime.MinValue && dt != DateTime.MaxValue)
@@ -122,121 +156,51 @@ namespace FarsiLibrary.Win.DevExpress
             }
             return base.GetDisplayText(format, editValue);
         }
+
+        // -------------------------------------------------------------------------
+        // ۵. تنظیم کانورتر اختصاصی برای تبدیل رشته تایپ شده به تاریخ میلادی
+        // -------------------------------------------------------------------------
+        protected override DateEditValueConverter CreateConverter()
+        {
+            return new PersianDateEditValueConverter(this);
+        }
     }
 
+    // =================================================================================
+    // کلاس مبدل داده (Converter)
+    // مسئول تبدیل متن فارسی وارد شده به تاریخ میلادی پشت صحنه
+    // =================================================================================
     public class PersianDateEditValueConverter : DateEditValueConverter
     {
-        private readonly IDateTimeOwner owner;
-
-        public PersianDateEditValueConverter(IDateTimeOwner owner) : base(owner)
-        {
-            this.owner = owner;
-        }
-
-        public new DateTime ConvertToDateTime(object val)
-        {
-            var converted = ConvertToObject(owner.DoParseEditValue(val));
-            if (converted is DateTime)
-                return (DateTime)converted;
-
-            var editValueEventArgs = owner.DoFormatEditValue(converted);
-            if (editValueEventArgs.Value is DateTime)
-                return (DateTime)editValueEventArgs.Value;
-
-            if (owner.NullDate is DateTime)
-                return (DateTime)owner.NullDate;
-
-            return PersianDate.MinValue;
-        }
+        public PersianDateEditValueConverter(IDateTimeOwner owner) : base(owner) { }
 
         protected override object ConvertToObject(ConvertEditValueEventArgs args)
         {
-            var obj = args.Value;
-            if (args.Handled)
-                return obj;
+            object val = args.Value;
 
-            if (obj == null || obj == DBNull.Value)
+            if (val == null || val == DBNull.Value)
                 return null;
 
-            if (obj.Equals(owner.NullDate))
-                return null;
-
-            if (obj is string && ((string)obj).Length == 0)
-                return null;
-
-            if (obj is DateTime)
+            // اگر ورودی رشته است (تایپ کاربر یا متن ماسک)
+            if (val is string strVal)
             {
-                var dt = (DateTime)obj;
-                if (!PersianCalendar.IsWithInSupportedRange(dt))
-                    return null;
+                strVal = strVal.Trim();
+                if (string.IsNullOrEmpty(strVal)) return null;
 
-                return dt;
-            }
-
-            try
-            {
-                // تلاش برای پارس کردن تاریخ
-                DateTime result;
-                // اینجا بهتر است ابتدا سعی کنیم شمسی پارس کنیم
-                if (PersianDate.TryParse(obj.ToString(), out PersianDate pd))
+                // تلاش برای تبدیل رشته شمسی به میلادی
+                if (PersianDate.TryParse(strVal, out PersianDate pd))
                 {
                     return pd.ToDateTime();
                 }
 
-                if (DateTime.TryParse(obj.ToString(), out result) &&
-                    PersianCalendar.IsWithInSupportedRange(result))
+                // پشتیبانی از فرمت میلادی (اگر کاربر میلادی وارد کرد)
+                if (DateTime.TryParse(strVal, out DateTime dt))
                 {
-                    return result;
+                    return dt;
                 }
-
-                return null;
             }
-            catch
-            {
-                return null;
-            }
+
+            return base.ConvertToObject(args);
         }
-    }
-
-    public class PersianDateEditFormatInfo : FormatInfo
-    {
-        private const string format = "yyyy/MM/dd";
-
-        public PersianDateEditFormatInfo(IComponentLoading componentLoading) : base(componentLoading)
-        {
-            FormatType = FormatType.DateTime;
-            FormatString = format;
-        }
-
-        public PersianDateEditFormatInfo()
-        {
-            FormatType = FormatType.DateTime;
-            FormatString = format;
-        }
-
-        protected override void ResetFormatType()
-        {
-            FormatType = FormatType.DateTime;
-        }
-
-        public override bool ShouldSerialize()
-        {
-            return FormatType != FormatType.DateTime;
-        }
-
-        protected override bool ShouldSerializeFormatString()
-        {
-            return FormatString != format;
-        }
-
-        protected override void ResetFormatString()
-        {
-            FormatString = format;
-        }
-    }
-
-
-    public class PersianDateTimeMaskManager : TextMaskManager
-    {
     }
 }
