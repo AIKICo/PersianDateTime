@@ -106,11 +106,10 @@ namespace FarsiLibrary.Win.DevExpress
 
         protected string GetYear(PickItemInfo info)
         {
-            var container = GetCalendar(info);
-            var date = container.GetDateFromIndex(info.Panel.ItemsProvider, info.ItemIndex);
-            var year = info.ItemIndex + 1;
-            var month = date.Month;
-            var day = date.Day;
+            DateTime date = GetCalendar(info).SelectedDate;
+            int year = info.ItemIndex + 1;
+            int month = date.Month;
+            int day = date.Day;
             PersianDate pd = new DateTime(year, month, day);
 
             return toFarsi.Convert(pd.Year.ToString());
@@ -121,24 +120,23 @@ namespace FarsiLibrary.Win.DevExpress
     {
         protected override void DrawCore(GraphicsCache cache, PickItemInfo info, IPickItemsContainerDrawInfo drawInfo)
         {
-            var painter = new PickItemsPainter();
+            PickItemsPainter painter = new PickItemsPainter();
             var pd = GetDate(info);
             var monthNo = toFarsi.Convert(pd.Month.ToString());
             var monthName = PersianDateTimeFormatInfo.AbbreviatedMonthGenitiveNames[pd.Month - 1];
 
-            var descriptionIsExist = GetCalendar(info).Handler.ShowTime();
-            var firstString = GetCalendar(info).Handler.ShowTime() ? monthNo : monthName;
-            var description = descriptionIsExist && painter.ShouldDrawDescription(info) ? monthName : string.Empty;
+            bool descriptionIsExist = GetCalendar(info).ShowTime();
+            string firstString = GetCalendar(info).ShowTime() ? monthNo : monthName;
+            string description = descriptionIsExist && painter.ShouldDrawDescription(info) ? monthName : string.Empty;
             painter.DrawItem(cache, drawInfo, info, firstString, description);
         }
 
         protected PersianDate GetDate(PickItemInfo info)
         {
-            var container = GetCalendar(info);
-            var date = container.GetDateFromIndex(info.Panel.ItemsProvider, info.ItemIndex);
-            var year = date.Year;
-            var month = info.ItemIndex + 1;
-            var day = date.Day;
+            DateTime date = GetCalendar(info).SelectedDate;
+            int year = date.Year;
+            int month = info.ItemIndex + 1;
+            int day = date.Day;
             date = new DateTime(year, month, day);
 
             return date;
@@ -152,19 +150,17 @@ namespace FarsiLibrary.Win.DevExpress
             var painter = new PickItemsPainter();
             var date = GetDate(info);
             var firstString = toFarsi.Convert(date.Day.ToString());
-            var descriptionIsExist = GetCalendar(info).Handler.ShowTime();
-            var description = descriptionIsExist && painter.ShouldDrawDescription(info) ? date.LocalizedWeekDayName : string.Empty;
-
+            bool descriptionIsExist = GetCalendar(info).ShowTime();
+            string description = descriptionIsExist && painter.ShouldDrawDescription(info) ? date.LocalizedWeekDayName : string.Empty;
             painter.DrawItem(cache, drawInfo, info, firstString, description);
         }
 
         protected PersianDate GetDate(PickItemInfo info)
         {
-            var container = GetCalendar(info);
-            var date = container.GetDateFromIndex(info.Panel.ItemsProvider, info.ItemIndex);
-            var year = date.Year;
-            var month = date.Month;
-            var day = info.ItemIndex + 1;
+            DateTime date = GetCalendar(info).SelectedDate;
+            int year = date.Year;
+            int month = date.Month;
+            int day = info.ItemIndex + 1;
             date = new DateTime(year, month, day);
 
             return date;
@@ -175,10 +171,9 @@ namespace FarsiLibrary.Win.DevExpress
     {
         protected override void DrawCore(GraphicsCache cache, PickItemInfo info, IPickItemsContainerDrawInfo drawInfo)
         {
-            var painter = new PickItemsPainter();
-            var descriptionIsExist = GetCalendar(info).Handler.ShowTime();
-            var firstString = info.ItemIndex == 0 ? PersianDateTimeFormatInfo.AMDesignator : PersianDateTimeFormatInfo.PMDesignator;
-
+            PickItemsPainter painter = new PickItemsPainter();
+            bool descriptionIsExist = GetCalendar(info).ShowTime();
+            string firstString = info.ItemIndex == 0 ? PersianDateTimeFormatInfo.AMDesignator : PersianDateTimeFormatInfo.PMDesignator;
             painter.DrawItem(cache, drawInfo, info, firstString, string.Empty);
         }
     }
@@ -196,9 +191,9 @@ namespace FarsiLibrary.Win.DevExpress
 
         protected override void DrawCore(GraphicsCache cache, PickItemInfo info, IPickItemsContainerDrawInfo drawInfo)
         {
-            var painter = new PickItemsPainter();
-            var firstString = toFarsi.Convert(painter.ConvertIntToString(info.ItemIndex + startIndex, StringLength));
-            var description = painter.ShouldDrawDescription(info) ? localizer.GetLocalizedString(StringID.Hour) : string.Empty;
+            PickItemsPainter painter = new PickItemsPainter();
+            string firstString = toFarsi.Convert(painter.ConvertIntToString(info.ItemIndex + startIndex, StringLength));
+            string description = painter.ShouldDrawDescription(info) ? localizer.GetLocalizedString(StringID.Hour) : string.Empty;
             painter.DrawItem(cache, drawInfo, info, firstString, description);
         }
     }
@@ -249,24 +244,14 @@ namespace FarsiLibrary.Win.DevExpress
         {
         }
 
-        protected override TouchCalendarHandler CreateHandler()
-        {
-            return new FADateEditTouchCalendarHandler(this);
-        }
-    }
-
-    public class FADateEditTouchCalendarHandler : DateEditTouchCalendarHandler
-    {
         int firstTimeProviderIndex = -1;
-
-        public FADateEditTouchCalendarHandler(IDateTouchCalendarControl calendar) : base(calendar)
-        {
-        }
 
         public override void AddNewProvider(DateTimeMaskFormatElementEditable editableFormat)
         {
-            if (!ShowTime() && IsTimeProvider(editableFormat))
-                return;
+            if (Form == null || Form.DateEdit == null || !ShowTime())
+            {
+                if (IsTimeProvider(editableFormat)) return;
+            }
 
             IItemsProvider provider = CreateNewFarsiProvider(editableFormat);
             if (provider != null)

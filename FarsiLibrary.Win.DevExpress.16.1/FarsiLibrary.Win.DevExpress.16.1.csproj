@@ -16,32 +16,6 @@
     <AssemblyOriginatorKeyFile>..\FarsiLibrary.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\RepositoryItemDateEditExtentions.cs">
-      <Link>RepositoryItemDateEditExtentions.cs</Link>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\RepositoryItemFADatePicker.cs">
-      <Link>RepositoryItemFADatePicker.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\XtraFACalendar.cs">
-      <Link>XtraFACalendar.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\XtraFADateEdit.cs">
-      <Link>XtraFADateEdit.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\XtraFADateEdit.Vista.cs">
-      <Link>XtraFADateEdit.Vista.cs</Link>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\XtraFADatePicker.cs">
-      <Link>XtraFADatePicker.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\FarsiLibrary.Win.DevExpress.15.2\XtraFAMonthView.cs">
-      <Link>XtraFAMonthView.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="..\Solution Items\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
