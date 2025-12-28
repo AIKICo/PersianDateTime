@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using FarsiLibrary.Utils;
 using FarsiLibrary.Win.BaseClasses;
 using FarsiLibrary.Win.Design;
 using FarsiLibrary.Win.Events;
@@ -97,6 +96,7 @@ namespace FarsiLibrary.Win.Controls
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size Size
         {
             get { return base.Size; }

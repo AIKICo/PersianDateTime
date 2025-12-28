@@ -298,6 +298,7 @@ namespace FarsiLibrary.Win.Controls
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size Size
         {
             get { return base.Size; }

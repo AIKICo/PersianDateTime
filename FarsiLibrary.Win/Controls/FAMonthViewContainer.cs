@@ -29,6 +29,7 @@ namespace FarsiLibrary.Win.Controls
         /// Owner control of this Popup control.
         /// </summary>
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control OwnerControl
         {
             get { return owner; }

@@ -296,11 +296,28 @@ namespace FarsiLibrary.Win.Controls
         ///<returns>
         ///The <see cref="T:System.Windows.Forms.DataGridView"></see> that contains the <see cref="T:System.Windows.Forms.DataGridViewCell"></see> that is being edited; null if there is no associated <see cref="T:System.Windows.Forms.DataGridView"></see>.
         ///</returns>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        ///<summary>
+        ///Gets or sets the <see cref="T:System.Windows.Forms.DataGridView"></see> that contains the cell.
+        ///</summary>
+        ///
+        ///<returns>
+        ///The <see cref="T:System.Windows.Forms.DataGridView"></see> that contains the <see cref="T:System.Windows.Forms.DataGridViewCell"></see> that is being edited; null if there is no associated <see cref="T:System.Windows.Forms.DataGridView"></see>.
+        ///</returns>
         public DataGridView EditingControlDataGridView
         {
             get; set;
         }
 
+        ///<summary>
+        ///Gets or sets the formatted value of the cell being modified by the editor.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Object"></see> that represents the formatted value of the cell.
+        ///</returns>
+        ///
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         ///<summary>
         ///Gets or sets the formatted value of the cell being modified by the editor.
         ///</summary>
@@ -315,6 +332,15 @@ namespace FarsiLibrary.Win.Controls
             set { SelectedDateTime = (DateTime) value; }
         }
 
+        ///<summary>
+        ///Gets or sets the index of the hosting cell's parent row.
+        ///</summary>
+        ///
+        ///<returns>
+        ///The index of the row that contains the cell, or –1 if there is no parent row.
+        ///</returns>
+        ///
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         ///<summary>
         ///Gets or sets the index of the hosting cell's parent row.
         ///</summary>
@@ -364,6 +390,10 @@ namespace FarsiLibrary.Win.Controls
                 EditingControlDataGridView.NotifyCurrentCellDirty(true);
         }
 
+        /// <summary>
+        /// Property which indicates whether the value of the editing control has changed or not
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         /// <summary>
         /// Property which indicates whether the value of the editing control has changed or not
         /// </summary>

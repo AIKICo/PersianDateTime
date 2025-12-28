@@ -55,33 +55,50 @@ namespace FarsiLibrary.Win.Controls
 		private bool _allowCancel = true;
 
 		private string _result = null;
-	    
-		#endregion
 
-		#region Props
-	    
-	    /// <summary>
+        #endregion
+
+        #region Props
+
+        /// <summary>
         /// Message string of the <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public string Message
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+
+        #endregion
+
+        #region Props
+
+        /// <summary>
+        /// Message string of the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public string Message
 		{
 			set { _lblMessage.Text = value; }
             get { return _lblMessage.Text; }
 		}
 
-	    /// <summary>
-	    /// Caption of the <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public string Caption
+        /// <summary>
+        /// Caption of the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Caption of the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public string Caption
 		{
 			set { Text = value; }
             get { return Text; }
 		}
 
-	    /// <summary>
-	    /// Custom font for the <see cref="CustomFont"/> control.
-	    /// </summary>
-		public Font CustomFont
+        /// <summary>
+        /// Custom font for the <see cref="CustomFont"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Custom font for the <see cref="CustomFont"/> control.
+        /// </summary>
+        public Font CustomFont
 		{
 			set { Font = value; }
             get { return Font; }
@@ -96,10 +113,14 @@ namespace FarsiLibrary.Win.Controls
 			get { return _buttons; }
 		}
 
-	    /// <summary>
-	    /// If set to <para>true</para>, messagebox control will save it's selected value.
-	    /// </summary>
-		public bool AllowSaveResponse
+        /// <summary>
+        /// If set to <para>true</para>, messagebox control will save it's selected value.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// If set to <para>true</para>, messagebox control will save it's selected value.
+        /// </summary>
+        public bool AllowSaveResponse
 		{
 			get { return _allowSaveResponse; }
 			set { _allowSaveResponse = value; }
@@ -113,19 +134,27 @@ namespace FarsiLibrary.Win.Controls
 			get { return _chbSaveResponse.Checked; }
 		}
 
-	    /// <summary>
-	    /// Text response of <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public string SaveResponseText
+        /// <summary>
+        /// Text response of <see cref="FAMessageBox"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Text response of <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public string SaveResponseText
 		{
 			set { _chbSaveResponse.Text = value; }
             get { return _chbSaveResponse.Text; }
 		}
 
-	    /// <summary>
-	    /// Icons of the <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public MessageBoxIcon StandardIcon
+        /// <summary>
+        /// Icons of the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Icons of the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public MessageBoxIcon StandardIcon
 		{
 			set 
 			{ 
@@ -138,10 +167,14 @@ namespace FarsiLibrary.Win.Controls
             get { return _standardIcon; }
 		}
 
-	    /// <summary>
-	    /// Custom icon that will be displayed in the <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public Icon CustomIcon
+        /// <summary>
+        /// Custom icon that will be displayed in the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Custom icon that will be displayed in the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public Icon CustomIcon
 		{
 			set
 			{
@@ -154,10 +187,14 @@ namespace FarsiLibrary.Win.Controls
 	        }
 		}
 
-	    /// <summary>
-	    /// Custom cancel button that will be used as default cancel button.
-	    /// </summary>
-		public FAMessageBoxButton CustomCancelButton
+        /// <summary>
+        /// Custom cancel button that will be used as default cancel button.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Custom cancel button that will be used as default cancel button.
+        /// </summary>
+        public FAMessageBoxButton CustomCancelButton
 		{
 			set { _cancelButton = value; }
 		}
@@ -170,10 +207,14 @@ namespace FarsiLibrary.Win.Controls
 			get { return _result; }
 		}
 
-	    /// <summary>
-	    /// Play sound when displaying the <see cref="FAMessageBox"/> control.
-	    /// </summary>
-		public bool PlaySound
+        /// <summary>
+        /// Play sound when displaying the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Play sound when displaying the <see cref="FAMessageBox"/> control.
+        /// </summary>
+        public bool PlaySound
 		{
 			get { return _playSound; }
 			set { _playSound = value; }

@@ -81,6 +81,7 @@ namespace FarsiLibrary.Win.FAPopup
             get { return shadows; } 
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int ShadowSize
         {
             get { return shadowSize; }
@@ -92,12 +93,14 @@ namespace FarsiLibrary.Win.FAPopup
             get { return owner; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool DrawShadow
         {
             get { return drawShadow; }
             set { drawShadow = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual Rectangle RealBounds
         {
             get 
