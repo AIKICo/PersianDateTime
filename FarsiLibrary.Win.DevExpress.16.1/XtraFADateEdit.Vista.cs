@@ -492,8 +492,6 @@ namespace FarsiLibrary.Win.DevExpress
             FirstDayOfWeek = DayOfWeek.Saturday;
             MinValue = PersianDate.MinValue;
             MaxValue = PersianDate.MaxValue;
-            RightToLeft = RightToLeft.Yes;
-            RightToLeftLayout = DefaultBoolean.True;
         }
 
         public new VistaPersianCalendarViewInfo CalendarViewInfo => (VistaPersianCalendarViewInfo)base.CalendarViewInfo;
