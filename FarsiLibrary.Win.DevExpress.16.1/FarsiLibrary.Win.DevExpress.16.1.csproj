@@ -9,7 +9,7 @@
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 
 		<PackageId>PersianDatetimePicker</PackageId>
-		<Version>3.2.0</Version>
+		<Version>3.3.0</Version>
 		<Authors>YourNameOrCompany</Authors>
 		<Company>FarsiLibrary</Company>
 		<Description>A Persian DateTime Picker for DevExpress Windows Forms.</Description>
