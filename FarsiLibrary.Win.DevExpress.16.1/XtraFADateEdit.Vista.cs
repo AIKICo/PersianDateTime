@@ -259,27 +259,43 @@ namespace FarsiLibrary.Win.DevExpress
             return toFarsi.Convert(pd.Day.ToString());
         }
 
+        // در فایل XtraFADateEdit.Vista.cs
+        // داخل کلاس VistaPersianCalendarViewInfo
+
+        // در فایل XtraFADateEdit.Vista.cs
+        // کلاس VistaPersianCalendarViewInfo
+
         protected override void CalcDayCells()
         {
             DayCells.Clear();
             RowCount = GetCellRowCount();
             ColumnCount = GetCellColumnCount();
 
-            var rightToLeftLayout = WindowsFormsSettings.GetIsRightToLeftLayout(Calendar);
+            // بررسی جهت کنترل
+            bool isRtl = Calendar.RightToLeft == System.Windows.Forms.RightToLeft.Yes;
+
+            // نقطه شروع Y
             var y = DayCellsBounds.Y;
 
             for (var iRow = 0; iRow < RowCount; ++iRow)
             {
-                var x = rightToLeftLayout ? DayCellsBounds.Right - ActualCellSize.Width : DayCellsBounds.X;
+                // محاسبه نقطه شروع X برای هر سطر
+                // اگر RTL باشد: از لبه راستِ کادر شروع کن (منهای عرض یک سلول)
+                // اگر LTR باشد: از لبه چپِ کادر شروع کن
+                var x = isRtl ? (DayCellsBounds.Right - ActualCellSize.Width) : DayCellsBounds.X;
+
                 for (var iCol = 0; iCol < ColumnCount; ++iCol)
                 {
                     bool correctDate;
 
+                    // مدیریت روزهای خالی اول ماه (Penalty)
                     if (iRow == 0)
                     {
                         if (iCol < PenaltyIndex)
                         {
-                            x += rightToLeftLayout ? -ActualCellSize.Width : ActualCellSize.Width;
+                            // فقط مکان‌نما را حرکت بده، سلولی نساز
+                            // اگر RTL است به سمت چپ (منفی) برو، اگر LTR به سمت راست (مثبت)
+                            x += isRtl ? -ActualCellSize.Width : ActualCellSize.Width;
                             continue;
                         }
                     }
@@ -299,7 +315,11 @@ namespace FarsiLibrary.Win.DevExpress
                     {
                         var dayCell = (PersianCalendarCellViewInfo)CreateDayCell(date);
                         dayCell.UpdateVisualState();
+
+                        // مختصات واقعی سلول را ست می‌کنیم
+                        // چون RightToLeftLayout خاموش است، این مختصات دقیقاً همان جایی است که موس باید کلیک کند
                         dayCell.Bounds = CalcCellBounds(x, y);
+
                         dayCell.Text = GetCellText(date, iRow, iCol);
                         dayCell.ContentBounds = CalcDayCellContentBounds(dayCell.Bounds);
                         dayCell.CalculateTextBounds();
@@ -308,12 +328,18 @@ namespace FarsiLibrary.Win.DevExpress
 
                         UpdateDayCell(dayCell);
                         DayCells.Add(dayCell);
+
+                        // گرید ناوبری (کیبورد) تغییری نمی‌کند چون بر اساس اندیس سطر و ستون است
                         CalendarInfo.AddCellToNavigationGrid(dayCell, Row, Column, iRow, iCol);
                     }
 
-                    x += rightToLeftLayout ? -ActualCellSize.Width : ActualCellSize.Width;
+                    // حرکت به سلول بعدی
+                    // در حالت RTL از X کم می‌کنیم (به چپ می‌رویم)
+                    // در حالت LTR به X اضافه می‌کنیم (به راست می‌رویم)
+                    x += isRtl ? -ActualCellSize.Width : ActualCellSize.Width;
                 }
 
+                // رفتن به سطر بعدی
                 y += ActualCellSize.Height;
             }
         }
@@ -450,12 +476,21 @@ namespace FarsiLibrary.Win.DevExpress
         {
         }
 
-        
+
+        // در فایل XtraFADateEdit.Vista.cs
+        // کلاس VistaPopupPersianDateEditForm
+
         protected override CalendarControl CreateCalendar()
         {
             var control = new PopupPersianCalendarControl();
+
+            // تنظیم جهت بر اساس کنترل مادر
             control.RightToLeft = OwnerEdit.RightToLeft;
-            control.RightToLeftLayout = DefaultBoolean.True;
+
+            // نکته مهم: اگر جهت راست‌چین است، باید لایه‌بندی سیستمی هم فعال شود تا هدرها و سلول‌ها قرینه شوند
+            control.RightToLeftLayout = DefaultBoolean.False;
+
+
             return control;
         }
 
