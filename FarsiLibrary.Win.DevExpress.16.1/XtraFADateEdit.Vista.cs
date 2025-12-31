@@ -453,7 +453,10 @@ namespace FarsiLibrary.Win.DevExpress
         
         protected override CalendarControl CreateCalendar()
         {
-            return new PopupPersianCalendarControl();
+            var control = new PopupPersianCalendarControl();
+            control.RightToLeft = OwnerEdit.RightToLeft;
+            control.RightToLeftLayout = DefaultBoolean.True;
+            return control;
         }
 
         protected override DateTime CalcCalendarInitialDate()
