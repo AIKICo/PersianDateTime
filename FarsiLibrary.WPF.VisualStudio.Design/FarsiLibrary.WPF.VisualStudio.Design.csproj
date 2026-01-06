@@ -20,5 +20,9 @@
   <ItemGroup>
     <ProjectReference Include="..\FarsiLibrary.Localization\FarsiLibrary.Localization.csproj" />
     <ProjectReference Include="..\FarsiLibrary.Utils\FarsiLibrary.Utils.csproj" />
+    <ProjectReference Include="..\FarsiLibrary.WPF\FarsiLibrary.WPF.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using Microsoft.Windows.Design.Interaction;
-using Microsoft.Windows.Design.Model;
 using FarsiLibrary.WPF.Controls;
 using System;
 

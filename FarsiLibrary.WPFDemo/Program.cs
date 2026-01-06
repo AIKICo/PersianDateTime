@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 
 namespace FarsiLibrary.WPFDemo
@@ -10,6 +12,9 @@ namespace FarsiLibrary.WPFDemo
         {
             try
             {
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("fa-ir");
+                Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+
                 new App().Run(new MainWindow());
             }
             catch (Exception ex)

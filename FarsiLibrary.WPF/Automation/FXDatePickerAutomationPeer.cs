@@ -139,6 +139,8 @@ namespace FarsiLibrary.WPF.Automation
             get { return this.OwnerControl.SelectedDateTime.HasValue ?  this.OwnerControl.SelectedDateTime.Value.ToString(CultureInfo.InvariantCulture) : this.OwnerControl.NullValueText; }
         }
 
+        public ExpandCollapseState ExpandCollapseState => throw new NotImplementedException();
+
         void IValueProvider.SetValue(string value)
         {
             this.OwnerControl.SelectedDateTime = DateTime.Parse(value, CultureInfo.InvariantCulture);

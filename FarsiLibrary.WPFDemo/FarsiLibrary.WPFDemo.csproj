@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>FarsiLibrary.WPFDemo.Program</StartupObject>
     <OutputPath>..\binaries\</OutputPath>
@@ -28,15 +28,10 @@
     <ProjectReference Include="..\FarsiLibrary.Localization\FarsiLibrary.Localization.csproj" />
     <ProjectReference Include="..\FarsiLibrary.Utils\FarsiLibrary.Utils.csproj" />
     <ProjectReference Include="..\FarsiLibrary.Win\FarsiLibrary.Win.csproj" />
+    <ProjectReference Include="..\FarsiLibrary.WPF\FarsiLibrary.WPF.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\App.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="PresentationFramework.Classic" />
-    <Reference Include="PresentationFramework.Luna" />
-    <Reference Include="PresentationFramework.Royale" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Logo.png" />
