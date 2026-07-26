@@ -20,7 +20,7 @@
     <EmbeddedResource Include="FXMonthView.Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DevExpress.Win.Design" Version="26.1.3" />
+    <PackageReference Include="DevExpress.Win.Design" Version="25.2.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FarsiLibrary.Localization\FarsiLibrary.Localization.csproj" />
