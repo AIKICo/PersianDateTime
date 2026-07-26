@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0-windows7.0</TargetFramework>
     <ProjectType>Local</ProjectType>
@@ -9,6 +9,13 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
 	<Version>3.3.0</Version>
+    <PackageId>FarsiLibrary.Utils</PackageId>
+    <Authors>Nisoc</Authors>
+    <Company>Nisoc</Company>
+    <Description>Persian/Farsi date and calendar utilities - PersianDate, PersianCalendar, date conversion and formatting.</Description>
+    <PackageTags>persian;farsi;calendar;datetime;shamsi;jalali;persiandate</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\nupkgs</PackageOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\FarsiLibrary.snk</AssemblyOriginatorKeyFile>

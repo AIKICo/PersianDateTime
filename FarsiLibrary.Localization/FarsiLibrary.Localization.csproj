@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0-windows7.0</TargetFramework>
     <ProjectType>Local</ProjectType>
@@ -11,6 +11,13 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
 	<Version>3.3.0</Version>
+    <PackageId>FarsiLibrary.Localization</PackageId>
+    <Authors>Nisoc</Authors>
+    <Company>Nisoc</Company>
+    <Description>Localization support for FarsiLibrary - Persian/Farsi calendar and date components.</Description>
+    <PackageTags>persian;farsi;calendar;datetime;shamsi;jalali;localization</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\nupkgs</PackageOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\FarsiLibrary.snk</AssemblyOriginatorKeyFile>
